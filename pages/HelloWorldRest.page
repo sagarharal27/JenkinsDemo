@@ -1,0 +1,6 @@
+<apex:page controller="oAuthRESTController">
+<apex:form >
+<apex:outputLabel value="{!FinalResponse}"></apex:outputLabel>
+<apex:commandButton action="{!MyServiceCall}" value="Show Response"/>
+</apex:form>
+</apex:page>

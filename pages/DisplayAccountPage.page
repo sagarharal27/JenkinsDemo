@@ -1,0 +1,35 @@
+<apex:page controller="DisplayAccount">
+	<apex:form >
+		<apex:pageBlock >
+			<apex:pageBlockTable value="{!accounts}" var="acc">
+				<apex:column headerValue="Name"> 
+<!-- 					 <apex:outputLink value="/{!acc.Id}/d">{!acc.Name} </apex:outputLink> -->
+					 
+					 <apex:commandLink action="{!showContactAndOpp}" value="{!acc.Name}" reRender="con,opp">
+                     <apex:param name="id" value="{!acc.id}" assignTo="{!accID}"/>
+                     </apex:commandLink>
+					 
+				</apex:column>
+				<apex:column value="{!acc.Phone}"/>
+				<apex:column value="{!acc.Billingcity}"/>
+			</apex:pageBlockTable>
+			
+			<apex:outputpanel id="con">
+				<apex:pageBlock title="Contact"  rendered="{!NOT(Contacts.size=0)}">
+					 <apex:pageBlockTable value="{!Contacts}" var="con">
+					 	<apex:column value="{!con.name}"/> 
+					 	<apex:column value="{!con.email}"/>
+					 </apex:pageBlockTable>
+				</apex:pageBlock>
+			</apex:outputpanel>
+			<apex:outputpanel id="opp">
+				<apex:pageBlock title="Opportunity" rendered="{!NOT(Opportunities.size=0)}">
+					<apex:pageBlockTable value="{!Opportunities}" var="Opp" >
+					 	<apex:column value="{!Opp.name}"/> 
+					 	<apex:column value="{!Opp.stageName}"/>
+					 </apex:pageBlockTable>
+				</apex:pageBlock>
+			</apex:outputpanel>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

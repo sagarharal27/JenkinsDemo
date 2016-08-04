@@ -1,0 +1,39 @@
+<apex:page controller="globleSearchPageController">
+	<apex:form >
+		<apex:pageBlock >
+			<apex:pageBlockSection columns="3">
+				<apex:outputLabel value="Enter Search Value"></apex:outputLabel>
+				<apex:inputText value="{!searchText}"/> 
+				<apex:commandButton value="Search" Action="{!getSearchResult}" reRender="panel"/> 
+			</apex:pageBlockSection>
+			<apex:outputPanel id="panel">
+				<apex:outputPanel rendered="{!Not(displayPanel=0)}" >
+					<apex:pageBlock title="Lead Result" rendered="{!NOT(leadSearchResult.size=0)}">
+						<apex:pageblockTable value="{!leadSearchResult}" var="leadRecord" >
+							<apex:column value="{!leadRecord.name}"/>
+							<apex:column value="{!leadRecord.firstName}"/>
+							<apex:column value="{!leadRecord.lastName}"/> 
+						</apex:pageblockTable> 
+					</apex:pageBlock>
+					<apex:pageBlock rendered="{!NOT(contactSearchResult.size=0)}" title="Contact Result">
+						<apex:pageblockTable value="{!contactSearchResult}" var="contactRecord" >
+							<apex:column value="{!contactRecord.name}"/>
+							<apex:column value="{!contactRecord.firstName}"/>
+							<apex:column value="{!contactRecord.lastName}"/>
+						</apex:pageblockTable>
+					</apex:pageBlock> 
+					<apex:pageBlock rendered="{!NOT(accountSearchResult.size=0)}" title="Account Result">
+						<apex:pageblockTable value="{!accountSearchResult}" var="accountRecord" >
+							<apex:column value="{!accountRecord.name}"/>
+						</apex:pageblockTable> 
+					</apex:pageBlock>
+					<apex:pageBlock rendered="{!NOT(opportunitySearchResult.size=0)}" title="opportunity Result">
+						<apex:pageblockTable value="{!opportunitySearchResult}" var="opportunityRecord" >
+							<apex:column value="{!opportunityRecord.name}"/>
+						</apex:pageblockTable> 
+					</apex:pageBlock>
+				</apex:outputPanel>
+			</apex:outputPanel>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

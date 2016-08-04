@@ -1,0 +1,80 @@
+<apex:page controller="SearchAccountController"> 
+ <apex:includeScript value="{!URLFOR($Resource.JavaScriptRemoting, 'JavaScriptRemoting.js')}"/>  
+	<apex:form >
+		<script>/*
+			function runOnEnter(ev) { 
+				if (window.event && window.event.keyCode == 13 || ev.which == 13) { 
+					searchAccRecs(); 
+					return false; 
+				} 
+				else { 
+					return true; 
+				} 
+			} 
+			
+			function deleteContact(conId,obj) {
+				  console.log('-- conId: '+conId);
+				  console.log('-- obj: ', obj);
+				  Visualforce.remoting.Manager.invokeAction(
+				  	'{!$RemoteAction.SearchAccountController.doDeleteContact}',
+				  	conId,
+				  		function(result, event) {
+					          if(event.type === 'exception') {
+					            console.log("exception");
+					            console.log(event);
+					          } else if (event.status) {
+					            //text = result;
+					            //document.getElementById('textResponseSpan').innerHTML = text;
+					            //document.getElementById('{!$Component.page.textResponseApexOutputText}').innerHTML = text;
+					            alert('success..'); 
+					          } else {
+					            console.log('Oh11'+event.message);
+					          }
+						}
+				  );
+    	    }
+    	    */
+		</script>
+		<apex:image URL="{!URLFOR($Resource.JavaScriptRemoting, 'HeaderImage.jpg')}" width="1100" Height="50"/>
+		<apex:pageBlock >
+			<apex:pageMessages ></apex:pageMessages>
+			<apex:pageBlockSection columns="3">
+				<apex:outputLabel value="Enter Account Name"/>  
+				<apex:inputText value="{!searchText}" onkeypress="return runOnEnter(event);"/>
+				<apex:commandButton id="btnSearch" action="{!searchAccount}" value="Search" reRender="panel"/>
+			</apex:pageBlockSection>
+			<apex:actionFunction action="{!searchAccount}" name="searchAccRecs" rerender="panel"/>
+		</apex:pageBlock> 
+			<apex:outputPanel id="panel">	
+				<apex:pageBlock title="Search Result" rendered="{!accounts.size!=0}"> 
+					<b><apex:outputLabel value="Accounts found  ">{!accounts.size}</apex:outputLabel> </b>
+					<apex:pageBlockTable value="{!accounts}" var="acc">
+						<apex:column value="{!acc.name}"/>
+						<apex:column value="{!acc.phone}"/>
+						<apex:column value="{!acc.Account_First_Name__c}"/>
+						<apex:column value="{!acc.Account_Last_Name__c}"/>	
+					</apex:pageBlockTable>
+					<b><apex:commandLink action="{!clearResult}" value="   Clear Result" rerender="panel"/></b>
+				</apex:pageBlock> 
+				<apex:pageBlock rendered="{!accounts.size!=0}" title="Related Contacts">
+					<span style="float: right; margin: 5px 5px 5px 5px;"> 
+						<apex:repeat value="{!AlphaList}" var="a">
+		                  <apex:commandLink value="{!a}" Action="{!getContactByAlphbet}" rerender="TablePanel">
+		                     <apex:param name="AlphaFilter" value="{!a}" assignTo="{!AlphaFilter}" /> 
+		                  </apex:commandLink> <b>| </b> 
+		               </apex:repeat>
+            	   </span> 
+				   <apex:pageBlockTable value="{!contacts}" var="con" id="TablePanel" >
+						<apex:column headerValue="Action"> 
+							<apex:commandLink Action="{!removeContact}" value="Delete" onclick="deleteContact('{!con.Id}')" rerender="TablePanel">
+								<apex:param name="id" value="{!con.id}" assignTo="{!CID}"/>
+							</apex:commandLink>
+                     	</apex:column>
+                     	<apex:column value="{!con.Name}" headerValue="Name" />
+						<apex:column value="{!con.FirstName}" headerValue="firstName"/> 
+						<apex:column value="{!con.lastName}" headerValue="LastName"/>
+					</apex:pageBlockTable>
+				</apex:pageBlock>
+			</apex:outputPanel>
+	</apex:form>
+</apex:page>
